@@ -1,5 +1,40 @@
 {% extends "climbed/layout.html" %}
-
+{% load static %}
 {% block body %}
+<header class="hero-section">
+    <h1>Track Your Climbing Progress</h1>
+    <p>Log your training sessions, analyze your performance, and achieve your climbing goals!</p>
+    <a class="a-animation hero-button" href="{% url 'register' %}">Start Your Journey</a>
+</header>
 
+<section class="images-section">
+    <h2>Climbing in Action</h2>
+    <div class="images-container">
+        <img src="{% static 'climbed/climb_big1.jpg' %}" alt="Climbing Image 1" class="climbing-image">
+        <img src="{% static 'climbed/climb_big2.jpg' %}" alt="Climbing Image 2" class="climbing-image">
+        <img src="{% static 'climbed/climb_big3.jpg' %}" alt="Climbing Image 3" class="climbing-image">
+    </div>
+</section>
+
+<section class="features-section">
+    <h2>Features</h2>
+    <div class="features-container">
+        <div class="feature-item">
+            <h3>Log Sessions</h3>
+            <p>Keep track of your climbing sessions effortlessly.</p>
+        </div>
+        <div class="feature-item">
+            <h3>Analyze Performance</h3>
+            <p>Get detailed insights into your climbing performance.</p>
+        </div>
+        <div class="feature-item">
+            <h3>Set Goals</h3>
+            <p>Set and achieve your climbing goals with our tools.</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>© 2024 Climbed. All rights reserved.</p>
+</footer>
 {% endblock %}
