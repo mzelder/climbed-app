@@ -9,10 +9,19 @@
 
 <section class="images-section">
     <h2>Climbing in Action</h2>
-    <div class="images-container">
-        <img src="{% static 'climbed/climb_big1.jpg' %}" alt="Climbing Image 1" class="climbing-image">
-        <img src="{% static 'climbed/climb_big2.jpg' %}" alt="Climbing Image 2" class="climbing-image">
-        <img src="{% static 'climbed/climb_big3.jpg' %}" alt="Climbing Image 3" class="climbing-image">
+    <div class="images-grid">
+        <div class="image-container">
+            <div class="loader"></div>
+            <img class="image-with-loader" src="{% static 'climbed/climb_big1.webp' %}" alt="Climbing Image 1" class="climbing-image">
+        </div>
+        <div class="image-container">
+            <div class="loader"></div>
+            <img class="image-with-loader" loading="lazy" src="{% static 'climbed/climb_big2.webp' %}" alt="Climbing Image 2" class="climbing-image">
+        </div>
+        <div class="image-container">
+            <div class="loader"></div>
+            <img class="image-with-loader" loading="lazy" src="{% static 'climbed/climb_big3.webp' %}" alt="Climbing Image 3" class="climbing-image">
+        </div>
     </div>
 </section>
 
@@ -33,8 +42,4 @@
         </div>
     </div>
 </section>
-
-<footer>
-    <p>© 2024 Climbed. All rights reserved.</p>
-</footer>
 {% endblock %}

@@ -1,5 +1,32 @@
 {% extends "climbed/layout.html" %}
-
+{% load static %}
 {% block body %}
-    
+    <div class="login-container">
+        <div class="photo-section">
+            <div class="column">
+                <img src="{% static 'climbed/climb_big1.webp' %}" alt="Climbing photo">        
+                <img src="{% static 'climbed/climb_small1.webp' %}" alt="Climbing photo">        
+            </div>
+            <div class="column">
+                <img src="{% static 'climbed/climb_small2.webp' %}" alt="Climbing photo">        
+                <img src="{% static 'climbed/climb_big2.webp' %}" alt="Climbing photo">        
+            </div>
+        </div>
+        <div class="form-section">
+            <h1>Sign In</h1>
+            <form action="{% url 'login_view' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">Username</label>
+                <input type="text" name="username" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" placeholder="Password">
+                </div>
+                <input type="submit" value="Sign In">
+            </form>    
+            <p>You don't have account? Sign up <a href="{% url 'register' %}">here</a> :)</p>
+        </div>
+    </div>
 {% endblock %}
