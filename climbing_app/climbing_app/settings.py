@@ -25,7 +25,11 @@ SECRET_KEY = "django-insecure-a6f@&dpx$9)^y43+tx3ox()bm^pc!kaf+*$(q6yxto6#3r2l8p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "192.168.0.165", 
+    "climbed.local",
+    "127.0.0.1"
+    ]
 
 
 # Application definition
@@ -106,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Warsaw"
 
 USE_I18N = True
 

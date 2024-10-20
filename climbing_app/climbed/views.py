@@ -1,12 +1,29 @@
+import calendar
+from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, HttpResponse, redirect
 from django.db import IntegrityError
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.http import JsonResponse
+from .helpers import get_month_informations
 
 
 def index(request):
-    return render(request, "climbed/index.html")
+    if request.user.is_authenticated:
+        now = timezone.localtime(timezone.now())
+        date = get_month_informations(now.month, now.year)
+        return render(request, "climbed/index.html", {"date": date})
+    else:   
+        return render(request, "climbed/index.html")
+
+def get_month(request, action, current_month, current_year):
+    if action == "previous":
+        date = get_month_informations(current_month - 1, current_year)
+    elif action == "next":
+        date = get_month_informations(current_month + 1, current_year)
+    
+    return JsonResponse(date)
 
 def login_view(request):
     if request.method == "POST":
