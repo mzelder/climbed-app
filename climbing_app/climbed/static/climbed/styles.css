@@ -410,3 +410,14 @@ footer {
 .form-section form {
     width: 70%;
 }
+
+.error {
+    background-color: rgb(255, 255, 255); /* Light red background */
+    color: red; /* Bright red text */
+    padding: 15px;
+    border: 2px solid red; /* Red border */
+    border-radius: 10px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}

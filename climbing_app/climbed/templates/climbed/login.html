@@ -14,18 +14,23 @@
         </div>
         <div class="form-section">
             <h1>Sign In</h1>
+            {% if message %}
+            <div class="error">
+                {{ message}}
+            </div>
+            {% endif %}
             <form action="{% url 'login_view' %}" method="POST">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="username">Username</label>
-                <input type="text" name="username" placeholder="Username">
+                    <input type="text" name="username" id="username" placeholder="Enter your username" required>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" name="password" placeholder="Password">
+                    <input type="password" name="password" id="password" placeholder="Enter your password" required>
                 </div>
-                <input type="submit" value="Sign In">
-            </form>    
+                <input type="submit" value="Sign Up">
+            </form>      
             <p>You don't have account? Sign up <a href="{% url 'register' %}">here</a> :)</p>
         </div>
     </div>

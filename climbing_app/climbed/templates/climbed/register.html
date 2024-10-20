@@ -4,19 +4,28 @@
 <div class="login-container login-container-reversed">
     <div class="form-section">
         <h1>Sign Up</h1>
-        <form action="{% url 'login_view' %}" method="POST">
+        {% if message %}
+            <div class="error">
+                {{ message}}
+            </div>
+        {% endif %}
+        <form action="{% url 'register' %}" method="POST">
             {% csrf_token %}
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" name="username" id="username" placeholder="Username">
+                <input type="text" name="username" id="username" placeholder="Enter your username" required>
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" name="email" id="email" placeholder="example@gmail.com">
+                <input type="email" name="email" id="email" placeholder="Enter your email" required>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" placeholder="Password">
+                <input type="password" name="password" id="password" placeholder="Enter your password" required>
+            </div>
+            <div class="form-group">
+                <label for="confrmation">Confirm password</label>
+                <input type="password" name="confirmation" id="confrmation" placeholder="Enter your password again" required>
             </div>
             <input type="submit" value="Sign Up">
         </form>    
