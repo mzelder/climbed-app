@@ -3,49 +3,108 @@
 {% block body %}
 
 {% if user.is_authenticated %}
-
+   <main class="main-signin">
+        <h1>Welcome back, Maciej!</h1>
+        
+        <section>
+            <div class="calendar">
+                <header>
+                    <i class="fa-solid fa-caret-up fa-2x fa-rotate-270"></i>
+                    <h1 class="color: white;">Month</h1>
+                    <i class="fa-solid fa-caret-up fa-2x fa-rotate-90"></i>
+                </header>
+                <div class="calendar-grid">
+                    {% for x in "00000000000000000000000000000000" %}
+                    <div class="day-element">
+                        <p style="font-weight: lighter;">1</p>
+                        <div class="task">
+                            <span>Climbing (Power)</span>
+                        </div>
+                        <div class="task">
+                            <span>Climbing (Power)</span>
+                        </div>
+                        <div class="task">
+                            <span>Climbing (Power)</span>
+                        </div>
+                        <div class="task">
+                            <span>Climbing (Power)</span>
+                        </div>
+                        <div class="task">
+                            <span>Climbing (Power)</span>
+                        </div>
+                        <div class="task">
+                            <span>Climbing (Power)</span>
+                        </div>
+                        <div class="task">
+                            <span>Climbing (Power)</span>
+                        </div>
+                        <div class="task">
+                            <span>Climbing (Power)</span>
+                        </div>
+                        <div class="task">
+                            <span>Climbing (Power)</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="information">
+                <h2>Your next workout</h2>
+                <div class="workout-label">
+                
+                </div>
+                <h2>Already done workout</h2>
+                <div class="workout-label">
+                
+                </div>
+            </div>
+        </section>
+    
+   </main>
 {% else %}
-    <header class="hero-section">
-        <h1>Track Your Climbing Progress</h1>
-        <p>Log your training sessions, analyze your performance, and achieve your climbing goals!</p>
-        <a class="a-animation hero-button" href="{% url 'register' %}">Start Your Journey</a>
-    </header>
-
-    <section class="images-section">
-        <h2>Climbing in Action</h2>
-        <div class="images-grid">
-            <div class="image-container">
-                <div class="loader"></div>
-                <img class="image-with-loader" src="{% static 'climbed/climb_big1.webp' %}" alt="Climbing Image 1" class="climbing-image">
+    <main>
+        <header class="hero-section">
+            <h1>Track Your Climbing Progress</h1>
+            <p>Log your training sessions, analyze your performance, and achieve your climbing goals!</p>
+            <a class="a-animation hero-button" href="{% url 'register' %}">Start Your Journey</a>
+        </header>
+    
+        <section class="images-section">
+            <h2>Climbing in Action</h2>
+            <div class="images-grid">
+                <div class="image-container">
+                    <div class="loader"></div>
+                    <img class="image-with-loader" src="{% static 'climbed/climb_big1.webp' %}" alt="Climbing Image 1" class="climbing-image">
+                </div>
+                <div class="image-container">
+                    <div class="loader"></div>
+                    <img class="image-with-loader" loading="lazy" src="{% static 'climbed/climb_big2.webp' %}" alt="Climbing Image 2" class="climbing-image">
+                </div>
+                <div class="image-container">
+                    <div class="loader"></div>
+                    <img class="image-with-loader" loading="lazy" src="{% static 'climbed/climb_big3.webp' %}" alt="Climbing Image 3" class="climbing-image">
+                </div>
             </div>
-            <div class="image-container">
-                <div class="loader"></div>
-                <img class="image-with-loader" loading="lazy" src="{% static 'climbed/climb_big2.webp' %}" alt="Climbing Image 2" class="climbing-image">
+        </section>
+    
+        <section class="features-section">
+            <h2>Features</h2>
+            <div class="features-container">
+                <div class="feature-item">
+                    <h3>Log Sessions</h3>
+                    <p>Keep track of your climbing sessions effortlessly.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Analyze Performance</h3>
+                    <p>Get detailed insights into your climbing performance.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Set Goals</h3>
+                    <p>Set and achieve your climbing goals with our tools.</p>
+                </div>
             </div>
-            <div class="image-container">
-                <div class="loader"></div>
-                <img class="image-with-loader" loading="lazy" src="{% static 'climbed/climb_big3.webp' %}" alt="Climbing Image 3" class="climbing-image">
-            </div>
-        </div>
-    </section>
-
-    <section class="features-section">
-        <h2>Features</h2>
-        <div class="features-container">
-            <div class="feature-item">
-                <h3>Log Sessions</h3>
-                <p>Keep track of your climbing sessions effortlessly.</p>
-            </div>
-            <div class="feature-item">
-                <h3>Analyze Performance</h3>
-                <p>Get detailed insights into your climbing performance.</p>
-            </div>
-            <div class="feature-item">
-                <h3>Set Goals</h3>
-                <p>Set and achieve your climbing goals with our tools.</p>
-            </div>
-        </div>
-    </section>
+        </section>
+    </main>
 {% endif %}
 
 {% endblock %}

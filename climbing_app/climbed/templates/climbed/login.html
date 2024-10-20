@@ -1,37 +1,39 @@
 {% extends "climbed/layout.html" %}
 {% load static %}
 {% block body %}
-    <div class="login-container">
-        <div class="photo-section">
-            <div class="column">
-                <img src="{% static 'climbed/climb_big1.webp' %}" alt="Climbing photo">        
-                <img src="{% static 'climbed/climb_small1.webp' %}" alt="Climbing photo">        
+    <main>
+        <div class="login-container">
+            <div class="photo-section">
+                <div class="column">
+                    <img src="{% static 'climbed/climb_big1.webp' %}" alt="Climbing photo">        
+                    <img src="{% static 'climbed/climb_small1.webp' %}" alt="Climbing photo">        
+                </div>
+                <div class="column">
+                    <img src="{% static 'climbed/climb_small2.webp' %}" alt="Climbing photo">        
+                    <img src="{% static 'climbed/climb_big2.webp' %}" alt="Climbing photo">        
+                </div>
             </div>
-            <div class="column">
-                <img src="{% static 'climbed/climb_small2.webp' %}" alt="Climbing photo">        
-                <img src="{% static 'climbed/climb_big2.webp' %}" alt="Climbing photo">        
+            <div class="form-section">
+                <h1>Sign In</h1>
+                {% if message %}
+                <div class="error">
+                    {{ message}}
+                </div>
+                {% endif %}
+                <form action="{% url 'login_view' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" name="username" id="username" placeholder="Enter your username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" id="password" placeholder="Enter your password" required>
+                    </div>
+                    <input type="submit" value="Sign Up">
+                </form>      
+                <p>You don't have account? Sign up <a href="{% url 'register' %}">here</a> :)</p>
             </div>
         </div>
-        <div class="form-section">
-            <h1>Sign In</h1>
-            {% if message %}
-            <div class="error">
-                {{ message}}
-            </div>
-            {% endif %}
-            <form action="{% url 'login_view' %}" method="POST">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" name="username" id="username" placeholder="Enter your username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" id="password" placeholder="Enter your password" required>
-                </div>
-                <input type="submit" value="Sign Up">
-            </form>      
-            <p>You don't have account? Sign up <a href="{% url 'register' %}">here</a> :)</p>
-        </div>
-    </div>
+    </main>
 {% endblock %}
