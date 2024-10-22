@@ -8,7 +8,6 @@
         <section>
             <div class="calendar">
                 <header>
-                    
                     <a href="{% url 'get_month' 'previous' date.current_month_number date.current_year %}"><i class="fa-solid fa-caret-up fa-2x fa-rotate-270"></i></a>
                     <h1 id="month-h1" class="color: white;">{{ date.current_month_string }}</h1>
                     <h1 id="year-h1" class="color: white;">{{ date.current_year }}</h1>
@@ -20,7 +19,7 @@
                         {% if day == date.current_day %} <p class="selected-day">{{ day }}</p>
                         {% else %} <p>{{ day }}</p> {% endif %}
                         <div class="task">
-                            <span>Climbing (Power)</span>
+                            <!-- <span>Climbing (Power)</span> -->
                         </div>
                     </div>
                     {% endfor %}
