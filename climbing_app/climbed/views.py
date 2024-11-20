@@ -6,6 +6,7 @@ from django.db import IntegrityError
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.http import JsonResponse
+from .models import Workout
 from .helpers import get_month_informations
 
 
@@ -71,3 +72,29 @@ def register(request):
         return redirect("index")
     else:
         return render(request, "climbed/register.html")
+    
+def add_workout(request):
+    if request.method == "POST":
+        # Data from showForm() in script.js 
+        title = request.POST["workout_title"]
+        type = request.POST["workout_type"]
+        planned_tiredness = request.POST["planned_tiredness"]
+        date = request.POST["date"]
+        description = request.POST["workout_description"]
+
+        workout = Workout.objects.create(
+            title=title,
+            workout_type=type,
+            planned_tiredness=planned_tiredness,
+            date=date,
+            workout_description=description,
+            user=request.user
+        )
+        workout.save()
+        workouts = Workout.objects.all()
+        for workout in workouts: 
+            print(workout.title, workout.date)
+            print()
+
+    
+    return redirect("index")
