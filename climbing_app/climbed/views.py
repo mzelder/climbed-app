@@ -30,11 +30,6 @@ def get_month(request, action, current_month, current_year):
         date = get_month_informations(current_month + 1, current_year)
     
     workouts = get_workouts(date["current_month_number"], date["current_year"])
-    
-    #debug
-    for workout in workouts: 
-        print(workout.date)
-    
     workouts_list = list(workouts.values())
 
     response_data = {

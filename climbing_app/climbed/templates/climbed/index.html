@@ -15,7 +15,7 @@
                 </header>
                 <div class="calendar-grid">
                     {% for day in date.days_list %}
-                    <div class="day-element">
+                    <div class="day-element" data-date="{{ date.current_year }}-{{ date.current_month_number }}-{{ day }}">
                         {% if day == date.current_day %} <p class="selected-day">{{ day }}</p>
                         {% else %} <p>{{ day }}</p> {% endif %}
                         <div class="task">
