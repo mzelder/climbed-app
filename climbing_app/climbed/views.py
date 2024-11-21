@@ -1,5 +1,6 @@
 import calendar
 from django.utils import timezone
+from datetime import datetime
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, HttpResponse, redirect
 from django.db import IntegrityError
@@ -7,14 +8,18 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.http import JsonResponse
 from .models import Workout
-from .helpers import get_month_informations
+from .helpers import get_month_informations, get_workouts
 
 
 def index(request):
     if request.user.is_authenticated:
         now = timezone.localtime(timezone.now())
         date = get_month_informations(now.month, now.year)
-        return render(request, "climbed/index.html", {"date": date})
+
+        return render(request, "climbed/index.html", {
+            "date": date,
+            "workouts": get_workouts(now.month, now.year)
+            })
     else:   
         return render(request, "climbed/index.html")
 
@@ -24,7 +29,19 @@ def get_month(request, action, current_month, current_year):
     elif action == "next":
         date = get_month_informations(current_month + 1, current_year)
     
-    return JsonResponse(date)
+    workouts = get_workouts(date["current_month_number"], date["current_year"])
+    
+    #debug
+    for workout in workouts: 
+        print(workout.date)
+    
+    workouts_list = list(workouts.values())
+
+    response_data = {
+        "date": date, 
+        "workouts": workouts_list
+    }
+    return JsonResponse(response_data)
 
 def login_view(request):
     if request.method == "POST":
@@ -79,22 +96,18 @@ def add_workout(request):
         title = request.POST["workout_title"]
         type = request.POST["workout_type"]
         planned_tiredness = request.POST["planned_tiredness"]
-        date = request.POST["date"]
+        date_str = request.POST["date"]
         description = request.POST["workout_description"]
 
+        print(date_str)
         workout = Workout.objects.create(
             title=title,
             workout_type=type,
             planned_tiredness=planned_tiredness,
-            date=date,
+            date=date_str,
             workout_description=description,
             user=request.user
         )
         workout.save()
-        workouts = Workout.objects.all()
-        for workout in workouts: 
-            print(workout.title, workout.date)
-            print()
-
     
     return redirect("index")

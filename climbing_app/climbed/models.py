@@ -9,7 +9,7 @@ class Workout(models.Model):
     planned_tiredness = models.IntegerField(
         validators=[MinLengthValidator(1), MaxLengthValidator(5)]
     )
-    date = models.DateTimeField()
+    date = models.DateField()
     workout_description = models.CharField(max_length=1000)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 

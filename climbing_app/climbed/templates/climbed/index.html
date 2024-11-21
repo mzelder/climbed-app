@@ -19,7 +19,11 @@
                         {% if day == date.current_day %} <p class="selected-day">{{ day }}</p>
                         {% else %} <p>{{ day }}</p> {% endif %}
                         <div class="task">
-                            <!-- <span>Climbing (Power)</span> -->
+                            {% for workout in workouts %}
+                                {% if workout.date.day == day %}
+                                    <span>{{ workout.title }}</span>   
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                     {% endfor %}

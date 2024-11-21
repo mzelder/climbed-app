@@ -1,5 +1,6 @@
 import calendar 
 from django.utils import timezone
+from .models import Workout
 
 def get_month_informations(current_month, current_year):
     if current_month > 12:
@@ -26,3 +27,7 @@ def get_month_informations(current_month, current_year):
         "current_day": current_day,
         "days_list": days_list
     }
+
+def get_workouts(month, year): 
+    workouts = Workout.objects.filter(date__month=month, date__year=year)
+    return workouts
