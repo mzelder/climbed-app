@@ -113,4 +113,20 @@ def add_workout(request):
     return redirect("index")
 
 def update_workout(request, id):
-    pass
+    if request.method == "POST":
+        workout = Workout.objects.get(id=id)
+        workout.title = request.POST["workout_title"]
+        workout.workout_type = request.POST["workout_type"]
+        workout.planned_tiredness = request.POST["planned_tiredness"]
+        workout.date = request.POST["date"]
+        workout.workout_description = request.POST["workout_description"]
+
+        workout.save()
+    
+    return redirect("index")
+
+def finish_workout(request, id):
+    if request.method == "POST":
+        workout = Workout.objects.get(id=id)
+    pass 
+

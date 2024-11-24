@@ -147,8 +147,8 @@
         const calendar = document.querySelector(".calendar");
     
         const formHTML = `
-            <header style="flex-direction: column;"><h1>Add workout</h1></header>
-            <form action="${workout ? `{% url 'update_workout' %}` : `{% url 'add_workout' %}`}" method="POST" class="form-workout">
+            <header style="flex-direction: column;"><h1>${workout ? "Finish Workout" : "Add Workout"}</h1></header>
+            <form action="${workout ? `/finish_workout/${workout.id}` : `{% url 'add_workout' %}`}" method="POST" class="form-workout">
                 {% csrf_token %}
                 <div class="column">
                     <div class="form-group">
@@ -163,9 +163,9 @@
                         <label for="planned_tiredness">Planned tiredness</label>
                         <select name="planned_tiredness" id="planned_tiredness" required>
                              <option value="" disabled ${!workout ? "selected" : ""}>Select planned tiredness level</option>
-                        ${[1, 2, 3, 4, 5].map(
-                            level => `<option value="${level}" ${workout && workout.planned_tiredness == level ? "selected" : ""}>${level}</option>`
-                        ).join("")}
+                            ${[1, 2, 3, 4, 5].map(
+                                level => `<option value="${level}" ${workout && workout.planned_tiredness == level ? "selected" : ""}>${level}</option>`
+                            ).join("")}
                         </select>
                     </div>
                 </div>
@@ -181,11 +181,22 @@
                     </div>
                 </div>
                 <span></span>
-                <input style="height: 50px; margin-right: auto;"; class="submit-button" type="submit" value="Save">
+                <input style="height: 50px; margin-right: auto;"; class="submit-button" type="submit" value="${workout ? "Finish" : "Save"}">
             </form>  
         `
-        
         calendar.innerHTML = formHTML; 
+
+        if (workout) { 
+            const workoutForm = document.querySelector("form"); 
+            const submitBtn = document.querySelector(".submit-button");
+            const formHeader = document.querySelector("header h1");
+
+            workoutForm.addEventListener("input", () => {
+                formHeader.innerText = "Edit Workout";
+                workoutForm.action = `update_workout/${workout.id}`;
+                submitBtn.value = "Edit";
+           });
+        }
     }
     </script>
 
