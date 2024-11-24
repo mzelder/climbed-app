@@ -6,6 +6,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.db import IntegrityError
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from .models import Workout
 from .helpers import get_month_informations, get_workouts
@@ -85,16 +86,20 @@ def register(request):
     else:
         return render(request, "climbed/register.html")
     
+def show_workout(request, id):
+    workout = Workout.objects.get(id=id)
+    workout_data = model_to_dict(workout)
+    return JsonResponse(workout_data)
+
 def add_workout(request):
     if request.method == "POST":
-        # Data from showForm() in script.js 
+        # Data from showForm() in layout.html  
         title = request.POST["workout_title"]
         type = request.POST["workout_type"]
         planned_tiredness = request.POST["planned_tiredness"]
         date_str = request.POST["date"]
         description = request.POST["workout_description"]
 
-        print(date_str)
         workout = Workout.objects.create(
             title=title,
             workout_type=type,
@@ -106,3 +111,6 @@ def add_workout(request):
         workout.save()
     
     return redirect("index")
+
+def update_workout(request, id):
+    pass

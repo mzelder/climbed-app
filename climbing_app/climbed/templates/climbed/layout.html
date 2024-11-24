@@ -56,6 +56,21 @@
                 dayDiv.addEventListener("click", () => showForm(date));
             });
         }
+
+        const taskDivsEvent = () => {
+            const taskDivs = document.querySelectorAll(".task");
+            taskDivs.forEach(taskDiv => {
+                const id = taskDiv.dataset.id;
+                taskDiv.addEventListener("click", (event) => {
+                        event.preventDefault();
+                        fetch(`show_workout/${id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            showForm(data.date, data);
+                        });
+                    });
+            })
+        }
     
         const buttons = document.querySelectorAll(".calendar header a");
         buttons.forEach(button => {
@@ -73,6 +88,7 @@
         });
     
         dayDivsEvent();
+        taskDivsEvent();
         
     });
     
@@ -103,48 +119,53 @@
                 p.classList.add("selected-day");
             }
             p.innerText = day;
-            
-            const taskDiv = document.createElement("div")
-            taskDiv.classList.add("task");
+            dayDiv.appendChild(p);
+
             for (workout of workouts) { 
                 let workout_day = workout.date.split("-")[2];
                 if (workout_day == day) {
+                    const taskDiv = document.createElement("div")
+                    taskDiv.classList.add("task");
+                    taskDiv.dataset.id = workout.id; 
                     taskDiv.innerHTML = `<span>${workout.title}</span>`;
+                    taskDiv.addEventListener("click", (event) => {
+                        event.preventDefault();
+                        fetch(`show_workout/${taskDiv.dataset.id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            showForm(data.date, data);
+                        });
+                    });
+                    dayDiv.appendChild(taskDiv);
                 }
             }
-    
-            dayDiv.appendChild(p);
-            dayDiv.appendChild(taskDiv);
-    
             calendarGrid.appendChild(dayDiv);
         }
     }
     
-    function showForm(date) {
+    function showForm(date, workout=null) {
         const calendar = document.querySelector(".calendar");
     
         const formHTML = `
             <header style="flex-direction: column;"><h1>Add workout</h1></header>
-            <form action="/add_workout" method="POST" class="form-workout">
+            <form action="${workout ? `{% url 'update_workout' %}` : `{% url 'add_workout' %}`}" method="POST" class="form-workout">
                 {% csrf_token %}
                 <div class="column">
                     <div class="form-group">
                         <label for="workout_title">Workout title</label>
-                        <input type="text" name="workout_title" id="workout_title" placeholder="Add workout title" required>
+                        <input value="${workout ? workout.title : ``}" type="text" name="workout_title" id="workout_title" placeholder="Add workout title" required>
                     </div>
                     <div class="form-group">
                         <label for="workout_type">Workout type</label>
-                        <input type="text" name="workout_type" id="workout_type" placeholder="power/endurance/finger power etc." required>
+                        <input value="${workout ? workout.workout_type : ``}" type="text" name="workout_type" id="workout_type" placeholder="power/endurance/finger power etc." required>
                     </div>
                     <div class="form-group">
                         <label for="planned_tiredness">Planned tiredness</label>
                         <select name="planned_tiredness" id="planned_tiredness" required>
-                            <option value="" disabled selected>Select planned tiredness level</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
+                             <option value="" disabled ${!workout ? "selected" : ""}>Select planned tiredness level</option>
+                        ${[1, 2, 3, 4, 5].map(
+                            level => `<option value="${level}" ${workout && workout.planned_tiredness == level ? "selected" : ""}>${level}</option>`
+                        ).join("")}
                         </select>
                     </div>
                 </div>
@@ -156,7 +177,7 @@
                     <div class="form-group">
                         <label for="workout_description">Workout description</label>
                         <textarea name="workout_description" cols="3"
-                         id="workout_description" placeholder="What you will be doing on the training" required></textarea>
+                         id="workout_description" placeholder="What you will be doing on the training" required>${workout ? workout.workout_description : ""}</textarea>
                     </div>
                 </div>
                 <span></span>

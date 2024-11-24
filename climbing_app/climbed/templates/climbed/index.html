@@ -18,13 +18,14 @@
                     <div class="day-element" data-date="{{ date.current_year }}-{{ date.current_month_number }}-{{ day }}">
                         {% if day == date.current_day %} <p class="selected-day">{{ day }}</p>
                         {% else %} <p>{{ day }}</p> {% endif %}
-                        <div class="task">
-                            {% for workout in workouts %}
-                                {% if workout.date.day == day %}
+                        
+                        {% for workout in workouts %}
+                            {% if workout.date.day == day %}
+                                <div class="task" data-id="{{ workout.id }}">
                                     <span>{{ workout.title }}</span>   
-                                {% endif %}
-                            {% endfor %}
-                        </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                     {% endfor %}
                 </div>
