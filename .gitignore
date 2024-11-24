@@ -1,4 +1,4 @@
 /venv
-/climbing_app/climbed/__pycache__/
-/climbing_app/climbing_app/__pycache__/
 TODO.txt
+climbing_app/climbed/__pycache__/
+climbing_app/db.sqlite3
