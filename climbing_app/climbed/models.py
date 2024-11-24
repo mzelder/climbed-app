@@ -11,6 +11,7 @@ class Workout(models.Model):
     )
     date = models.DateField()
     workout_description = models.CharField(max_length=1000)
+    status = models.CharField(max_length=20, default="created")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class AfterWorkout(models.Model):

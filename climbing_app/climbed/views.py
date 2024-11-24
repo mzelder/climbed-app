@@ -128,5 +128,9 @@ def update_workout(request, id):
 def finish_workout(request, id):
     if request.method == "POST":
         workout = Workout.objects.get(id=id)
-    pass 
+        workout.status = "finished"
+        
+        workout.save()
+
+    return redirect("index")
 
