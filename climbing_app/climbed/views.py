@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.forms.models import model_to_dict
 from django.http import JsonResponse
-from .models import Workout
+from .models import Workout, AfterWorkout
 from .helpers import get_month_informations, get_workouts
 
 
@@ -108,7 +108,6 @@ def add_workout(request):
             workout_description=description,
             user=request.user
         )
-        workout.save()
     
     return redirect("index")
 
@@ -134,3 +133,14 @@ def finish_workout(request, id):
 
     return redirect("index")
 
+def after_workout(request, id):
+    if request.method == "POST":
+        workout = Workout.objects.get(id=id)
+
+        after_workout = AfterWorkout.objects.create(
+            workout = workout,
+            tiredness = request.POST["tiredness"],
+            feeling_description = request.POST["description"]
+        )
+    
+    return redirect("index")

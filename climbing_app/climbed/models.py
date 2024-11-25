@@ -15,6 +15,7 @@ class Workout(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class AfterWorkout(models.Model):
+    workout = models.ForeignKey(Workout, on_delete=models.CASCADE, related_name="after_workout")
     tiredness = models.IntegerField(
         validators=[MinLengthValidator(1), MaxLengthValidator(5)]
     )

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climbed</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'climbed/styles.css' %}">
+    <script src="https://kit.fontawesome.com/110c5a2248.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const images = document.querySelectorAll(".image-with-loader");
+    
+        images.forEach(image => {
+            const hideLoader = () => {
+                const loader = image.previousElementSibling; 
+                if (loader) {
+                    loader.style.display = "none";
+                }
+                image.style.opacity = 1;
+            };
+    
+            if (image.complete) {
+                hideLoader(); 
+            } else {
+                image.addEventListener("load", hideLoader);
+    
+                image.addEventListener("error", function() {
+                    const loader = image.previousElementSibling;
+                    if (loader) {
+                        loader.style.display = "none"; 
+                    }
+                    image.alt = "Image failed to load";
+                });
+            }
+        });
+    
+        // Calendar functions
+        const dayDivsEvent = () => {
+            const dayDivs = document.querySelectorAll(".day-element"); 
+            dayDivs.forEach(dayDiv => {
+                let date = dayDiv.dataset.date;
+                
+                // We need to prefix one digit days and months with 0
+                const year = date.split("-")[0];
+                let month = date.split("-")[1];
+                let day = date.split("-")[2];
+                if (day.length == 1) day = `0${day}`;
+                if (month.length == 1) month = `0${month}`;
+                date = `${year}-${month}-${day}`;
+                dayDiv.addEventListener("click", () => showForm(date));
+            });
+        }
+
+        const taskDivsEvent = () => {
+            const taskDivs = document.querySelectorAll(".task");
+            taskDivs.forEach(taskDiv => {
+                const id = taskDiv.dataset.id;
+                taskDiv.addEventListener("click", (event) => {
+                        event.preventDefault();
+                        fetch(`show_workout/${id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            showForm(data.date, data);
+                        });
+                    });
+            })
+        }
+    
+        const buttons = document.querySelectorAll(".calendar header a");
+        buttons.forEach(button => {
+            button.addEventListener("click", (event) => {
+                event.preventDefault();
+                
+                const url = button.getAttribute("href");
+                fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    updateCalendar(date=data.date, workouts=data.workouts);
+                    dayDivsEvent();
+                });
+            });
+        });
+    
+        dayDivsEvent();
+        taskDivsEvent();
+        
+    });
+    
+    function updateCalendar(date, workouts) { 
+        const calendar = document.querySelector(".calendar");
+        const monthH1 = document.getElementById("month-h1");
+        const yearH1 = document.getElementById("year-h1");
+        const calendarGrid = calendar.querySelector(".calendar-grid");
+        const buttons = document.querySelectorAll(".calendar header a");
+    
+        // Change month h1
+        monthH1.innerText = date.current_month_string;
+        yearH1.innerText = date.current_year;
+    
+        // Change buttons inner values
+        buttons[0].href = `get_month/previous/${date.current_month_number}/${date.current_year}`;
+        buttons[1].href = `get_month/next/${date.current_month_number}/${date.current_year}`;
+    
+        // Changing calendar grid
+        calendarGrid.innerHTML = "";
+        for (const day of date.days_list) {
+            const dayDiv = document.createElement("div")
+            dayDiv.classList.add("day-element");
+            dayDiv.dataset.date = `${date.current_year}-${date.current_month_number}-${day}`;
+    
+            const p = document.createElement("p");
+            if (day === date.current_day && date.is_now_month && date.is_now_year) {
+                p.classList.add("selected-day");
+            }
+            p.innerText = day;
+            dayDiv.appendChild(p);
+
+            for (workout of workouts) { 
+                let workout_day = workout.date.split("-")[2];
+                if (workout_day == day) {
+                    const taskDiv = document.createElement("div")
+                    taskDiv.classList.add("task");
+                    taskDiv.dataset.id = workout.id; 
+                    taskDiv.innerHTML = `<span>${workout.title}</span>`;
+                    taskDiv.addEventListener("click", (event) => {
+                        event.preventDefault();
+                        fetch(`show_workout/${taskDiv.dataset.id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            showForm(data.date, data);
+                        });
+                    });
+                    dayDiv.appendChild(taskDiv);
+                }
+            }
+            calendarGrid.appendChild(dayDiv);
+        }
+    }
+    
+    function showForm(date, workout=null) {
+        const calendar = document.querySelector(".calendar");
+        const isFinished = workout && workout.status == "finished"; 
+    
+        const formHTML = `
+        <header style="flex-direction: column;"><h1>${workout ? "FINISH WORKOUT" : "ADD WORKOUT"}</h1></header>
+        <form action="${workout ? `/finish_workout/${workout.id}` : `{% url 'add_workout' %}`}" method="POST" class="form-workout">
+            {% csrf_token %}
+            <div class="column">
+                <div class="form-group">
+                    <label for="workout_title">Workout title</label>
+                    <input value="${workout ? workout.title : ``}" type="text" name="workout_title" id="workout_title" placeholder="Add workout title" required ${isFinished ? "disabled" : ""}>
+                </div>
+                <div class="form-group">
+                    <label for="workout_type">Workout type</label>
+                    <input value="${workout ? workout.workout_type : ``}" type="text" name="workout_type" id="workout_type" placeholder="power/endurance/finger power etc." required ${isFinished ? "disabled" : ""}>
+                </div>
+                <div class="form-group">
+                    <label for="planned_tiredness">Planned tiredness</label>
+                    <select name="planned_tiredness" id="planned_tiredness" required ${isFinished ? "disabled" : ""}>
+                        <option value="" disabled ${!workout ? "selected" : ""}>Select planned tiredness level</option>
+                        ${[1, 2, 3, 4, 5].map(
+                            level => `<option value="${level}" ${workout && workout.planned_tiredness == level ? "selected" : ""}>${level}</option>`
+                        ).join("")}
+                    </select>
+                </div>
+            </div>
+            <div class="column">
+                <div class="form-group">
+                    <label for="date">Workout date</label>
+                    <input type="date" name="date" value="${date}" cols="3" required ${isFinished ? "disabled" : ""}>
+                </div>
+                <div class="form-group">
+                    <label for="workout_description">Workout description</label>
+                    <textarea name="workout_description" cols="3"
+                        id="workout_description" placeholder="What you will be doing on the training" required ${isFinished ? "disabled" : ""}>${workout ? workout.workout_description : ""}</textarea>
+                </div>
+            </div>
+            <span></span>
+            <input style="height: 50px; margin-right: auto;" class="submit-button" type="submit" value="${workout ? "Finish" : "Save"}">
+        </form>  
+    `;
+        calendar.innerHTML = formHTML; 
+
+        const workoutForm = document.querySelector("form"); 
+        const submitBtn = document.querySelector(".submit-button");
+        const formHeader = document.querySelector("header h1");
+        
+        // If workout already finished 
+        if (isFinished) {
+            const afterWorkoutForm = 
+            `
+                <header style="flex-direction: column;"><h1>HOW WAS IT?</h1></header>
+                <form action="after_workout/${workout.id}" method="POST" class="after-workout-form">
+                    {% csrf_token %}
+                    <h2 style="color: white;">Level of tiredness</h2>
+                    <div class="form-group">
+                        <div class="radio-group">
+                            <input type="radio" name="tiredness" value="1" required>
+                            <label for="1">1</label>
+                        </div>
+                        <div class="radio-group">
+                            <input type="radio" name="tiredness" value="2" required>
+                            <label for="2">2</label>
+                        </div>
+                        <div class="radio-group">
+                            <input type="radio" name="tiredness" value="3" required>
+                            <label for="3">3</label>
+                        </div>
+                        <div class="radio-group">
+                            <input type="radio" name="tiredness" value="4" required>
+                            <label for="4">4</label>
+                        </div>
+                        <div class="radio-group">
+                            <input type="radio" name="tiredness" value="5" required>
+                            <label for="5">5</label>
+                        </div>
+                    </div>
+                    <textarea name="description" placeholder="Describe how you felt after workout."></textarea>
+                    <span></span>
+                    <input style="height: 50px; margin-right: auto;" class="submit-button" type="submit" value="Hooray!">
+                </form>    
+            `;
+            
+            formHeader.innerText = "FINISHED WORKOUT";
+            submitBtn.value = "Tell how you felt on workout"; 
+            workoutForm.addEventListener("submit", (event) => { 
+                event.preventDefault();
+                console.log('hi'); 
+                calendar.innerHTML = afterWorkoutForm;
+            })
+        }
+
+        // If any value will change before checking workout as finished    
+        if (workout) { 
+            workoutForm.addEventListener("input", () => {
+                formHeader.innerText = "Edit Workout";
+                workoutForm.action = `update_workout/${workout.id}`;
+                submitBtn.value = "Edit";
+           });
+        }
+    }
+
+    function showAfterWorkoutForm(workout) {
+        const calendar = document.querySelector(".calendar");
+
+        const formHTML = 
+        `
+            <header style="flex-direction: column;"><h1>How are you feeling after workout?</h1></header>
+            <form action="/after_workout/${workout.id}" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                        <label for="workout_description">Workout description</label>
+                        <textarea name="workout_description" cols="3"
+                         id="workout_description" placeholder="What you will be doing on the training" required>${workout ? workout.workout_description : ""}</textarea>
+                </div>
+                <input style="height: 50px; margin-right: auto;"; class="submit-button" type="submit" value="${workout ? "Finish" : "Save"}">
+            </form>  
+        `
+
+        calendar.innerHTML = formHTML;
+    }
+    </script>
+
+    <nav>
+        <a href="{% url 'index' %}">
+            <img src="{% static 'climbed/logo_icon.png' %}" class="logo-icon" alt="Logo Icon">
+        </a>
+        {% if user.is_authenticated %}
+            <li style="margin-left: auto;"><a class="a-animation" href="{% url 'logout_view' %}">Sign Out</a></li>
+        {% else %}
+            <li class="mr-100"><a href="{% url 'index' %}">Home</a></li>
+            <li><a class="a-animation" href="{% url 'login_view' %}">Sign In</a></li>
+            <li><a class="a-animation" href="{% url 'register' %}">Get Started</a></li>
+        {% endif %}
+    </nav>
+    
+    {% block body %}
+    {% endblock %}
+    
+    <footer>
+        <p>© 2024 Climbed. All rights reserved.</p>
+    </footer>
+</body>
+</html>
