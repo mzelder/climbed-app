@@ -21,9 +21,15 @@
                         
                         {% for workout in workouts %}
                             {% if workout.date.day == day %}
-                                <div class="task" data-id="{{ workout.id }}">
-                                    <span>{{ workout.title }}</span>   
-                                </div>
+                                {% if workout.status == 'finished' %}
+                                    <div class="task finished" data-id="{{ workout.id }}">
+                                        <span>{{ workout.title }}</span>   
+                                    </div>
+                                {% else %}
+                                    <div class="task finished" data-id="{{ workout.id }}">
+                                        <span>{{ workout.title }}</span>   
+                                    </div>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -32,9 +38,17 @@
             </div>
             <div class="information">
                 <h2>Your next workout</h2>
-                <div class="workout-label">
+                <a class="workout-label" data-id="{{ next_workout.id }}">
+                    <div class="data">
+                        <span>{{ next_workout.title }}</span> 
+                        <div class="date">{{ next_workout.date|date:"F j, Y" }}</div>
+                        <div class="badge">{{ next_workout.workout_type }}</div>
+                    </div>
+                    <div class="description">
+                        {{ next_workout.workout_description }}
+                    </div> 
+                </a>
                 
-                </div>
                 <h2>Already done workout</h2>
                 <div class="workout-label">
                 

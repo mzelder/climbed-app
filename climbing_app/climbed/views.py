@@ -9,17 +9,20 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from .models import Workout, AfterWorkout
-from .helpers import get_month_informations, get_workouts
-
+from .helpers import get_month_informations, get_workouts_for_current_month
 
 def index(request):
     if request.user.is_authenticated:
         now = timezone.localtime(timezone.now())
         date = get_month_informations(now.month, now.year)
+        
+        workouts = get_workouts_for_current_month(now.month, now.year)
+        next_workout = Workout.objects.filter(date__gte=now, status="created").first()
 
         return render(request, "climbed/index.html", {
             "date": date,
-            "workouts": get_workouts(now.month, now.year)
+            "workouts": workouts,
+            "next_workout": next_workout
             })
     else:   
         return render(request, "climbed/index.html")
@@ -30,7 +33,7 @@ def get_month(request, action, current_month, current_year):
     elif action == "next":
         date = get_month_informations(current_month + 1, current_year)
     
-    workouts = get_workouts(date["current_month_number"], date["current_year"])
+    workouts = get_workouts_for_current_month(date["current_month_number"], date["current_year"])
     workouts_list = list(workouts.values())
 
     response_data = {

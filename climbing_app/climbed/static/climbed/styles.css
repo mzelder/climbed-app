@@ -520,6 +520,7 @@ footer {
 }
 
 .task {
+    width: 100%;
     background-color: white;
     color: black;
     border-radius: 5px;
@@ -534,6 +535,16 @@ footer {
     background-color: #FF6500;
     color: white;
     cursor: pointer;
+}
+
+.finished {
+    background-color: #FF6500;
+    color: white; 
+}
+
+.finished:hover { 
+    background-color: white;
+    color: black;
 }
 
 /* Add workout form  */
@@ -638,3 +649,65 @@ footer {
     resize: none;
 }
 
+.workout-label {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 2px solid white;
+    background-image: linear-gradient(#0B192C, #1F3556);
+    color: white;
+    border-radius: 15px;
+    display: grid;
+    grid-template-columns: 30% 70%;
+    transition: all 0.3s ease;
+}
+
+.workout-label:hover {
+    border-color: #FF6500;
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.workout-label .data { 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+}
+
+.workout-label span {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #FF6500;
+}
+
+.workout-label .date {
+    font-size: 0.9rem;
+    color: white;
+    opacity: 0.7;
+    margin-top: 5px;
+}
+
+.workout-label .badge {
+    background-color: #1E3E62;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.workout-label .task-status {
+    margin-top: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #FF6500;
+}
+
+.workout-label .description {
+    text-align: center;
+    font-size: 0.9rem;
+    color: white;
+}

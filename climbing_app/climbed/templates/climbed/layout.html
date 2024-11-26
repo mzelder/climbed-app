@@ -69,7 +69,22 @@
                             showForm(data.date, data);
                         });
                     });
-            })
+            });
+        }
+
+        const informationDivsEvent = () => {
+            const informationDivs = document.querySelectorAll(".workout-label");
+            informationDivs.forEach(informationDiv => { 
+                const id = informationDiv.dataset.id;
+                informationDiv.addEventListener("click", (event) => {
+                    event.preventDefault();
+                    fetch(`show_workout/${id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        showForm(data.date, data);
+                    });
+                });
+            });
         }
     
         const buttons = document.querySelectorAll(".calendar header a");
@@ -89,6 +104,7 @@
     
         dayDivsEvent();
         taskDivsEvent();
+        informationDivsEvent();
         
     });
     
@@ -126,6 +142,7 @@
                 if (workout_day == day) {
                     const taskDiv = document.createElement("div")
                     taskDiv.classList.add("task");
+                    if (workout.status == "finished") taskDiv.classList.add("finished");
                     taskDiv.dataset.id = workout.id; 
                     taskDiv.innerHTML = `<span>${workout.title}</span>`;
                     taskDiv.addEventListener("click", (event) => {
