@@ -18,11 +18,13 @@ def index(request):
         
         workouts = get_workouts_for_current_month(now.month, now.year)
         next_workout = Workout.objects.filter(date__gte=now, status="created").first()
+        last_workout = Workout.objects.filter(date__lte=now, status="finished").last()
 
         return render(request, "climbed/index.html", {
             "date": date,
             "workouts": workouts,
-            "next_workout": next_workout
+            "next_workout": next_workout,
+            "last_workout": last_workout
             })
     else:   
         return render(request, "climbed/index.html")

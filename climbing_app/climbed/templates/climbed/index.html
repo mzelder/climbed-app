@@ -26,7 +26,7 @@
                                         <span>{{ workout.title }}</span>   
                                     </div>
                                 {% else %}
-                                    <div class="task finished" data-id="{{ workout.id }}">
+                                    <div class="task" data-id="{{ workout.id }}">
                                         <span>{{ workout.title }}</span>   
                                     </div>
                                 {% endif %}
@@ -50,9 +50,16 @@
                 </a>
                 
                 <h2>Already done workout</h2>
-                <div class="workout-label">
-                
-                </div>
+                <a class="workout-label" data-id="{{ last_workout.id }}">
+                    <div class="data">
+                        <span>{{ last_workout.title }}</span> 
+                        <div class="date">{{ last_workout.date|date:"F j, Y" }}</div>
+                        <div class="badge">{{ last_workout.workout_type }}</div>
+                    </div>
+                    <div class="description">
+                        {{ last_workout.workout_description }}
+                    </div> 
+                </a>
             </div>
         </section>
     
