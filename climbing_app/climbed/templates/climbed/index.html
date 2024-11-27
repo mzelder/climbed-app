@@ -38,28 +38,41 @@
             </div>
             <div class="information">
                 <h2>Your next workout</h2>
-                <a class="workout-label" data-id="{{ next_workout.id }}">
-                    <div class="data">
-                        <span>{{ next_workout.title }}</span> 
-                        <div class="date">{{ next_workout.date|date:"F j, Y" }}</div>
-                        <div class="badge">{{ next_workout.workout_type }}</div>
-                    </div>
-                    <div class="description">
-                        {{ next_workout.workout_description }}
-                    </div> 
-                </a>
+                {% if next_workout %}
+                    <a class="workout-label" data-id="{{ next_workout.id }}">
+                        <div class="data">
+                            <span>{{ next_workout.title }}</span> 
+                            <div class="date">{{ next_workout.date|date:"F j, Y" }}</div>
+                            <div class="badge">{{ next_workout.workout_type }}</div>
+                        </div>
+                        <div class="description">
+                            {{ next_workout.workout_description }}
+                        </div> 
+                    </a>
+                {% else %}
+                    <a class="workout-label" style="grid-template-columns: 100%;">
+                        <span>No workouts available.<br>Add a new one to get started!</span>
+                    </a>
+                {% endif %}
+                    
                 
                 <h2>Already done workout</h2>
-                <a class="workout-label" data-id="{{ last_workout.id }}">
-                    <div class="data">
-                        <span>{{ last_workout.title }}</span> 
-                        <div class="date">{{ last_workout.date|date:"F j, Y" }}</div>
-                        <div class="badge">{{ last_workout.workout_type }}</div>
-                    </div>
-                    <div class="description">
-                        {{ last_workout.workout_description }}
-                    </div> 
-                </a>
+                {% if last_workout %}
+                    <a class="workout-label" data-id="{{ last_workout.id }}">
+                        <div class="data">
+                            <span>{{ last_workout.title }}</span> 
+                            <div class="date">{{ last_workout.date|date:"F j, Y" }}</div>
+                            <div class="badge">{{ last_workout.workout_type }}</div>
+                        </div>
+                        <div class="description">
+                            {{ last_workout.workout_description }}
+                        </div> 
+                    </a>
+                {% else %}
+                    <a class="workout-label" style="grid-template-columns: 100%;">
+                        <span>No workouts finished yet.<br>Finish a workout to see it here!</span>
+                    </a>
+                {% endif %}
             </div>
         </section>
     

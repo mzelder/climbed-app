@@ -78,11 +78,16 @@
                 const id = informationDiv.dataset.id;
                 informationDiv.addEventListener("click", (event) => {
                     event.preventDefault();
-                    fetch(`show_workout/${id}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        showForm(data.date, data);
-                    });
+                    
+                    if (id == undefined) {
+                        showForm();
+                    } else { 
+                        fetch(`show_workout/${id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            showForm(data.date, data);
+                        });
+                    }
                 });
             });
         }
@@ -190,7 +195,7 @@
             <div class="column">
                 <div class="form-group">
                     <label for="date">Workout date</label>
-                    <input type="date" name="date" value="${date}" cols="3" required ${isFinished ? "disabled" : ""}>
+                    <input type="date" name="date" value="${date ? date : ""}" cols="3" required ${isFinished ? "disabled" : ""}>
                 </div>
                 <div class="form-group">
                     <label for="workout_description">Workout description</label>

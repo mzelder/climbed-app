@@ -502,6 +502,7 @@ footer {
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    cursor: pointer;
 }
 
 .selected-day {
@@ -657,7 +658,7 @@ footer {
     color: white;
     border-radius: 15px;
     display: grid;
-    grid-template-columns: 30% 70%;
+    grid-template-columns: 50% 50%;
     transition: all 0.3s ease;
 }
 
