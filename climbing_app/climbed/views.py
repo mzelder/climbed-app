@@ -13,12 +13,13 @@ from .helpers import get_month_informations, get_workouts_for_current_month
 
 def index(request):
     if request.user.is_authenticated:
+        user = User.objects.get(username=request.user)
         now = timezone.localtime(timezone.now())
         date = get_month_informations(now.month, now.year)
         
-        workouts = get_workouts_for_current_month(now.month, now.year)
-        next_workout = Workout.objects.filter(date__gte=now, status="created").first()
-        last_workout = Workout.objects.filter(date__lte=now, status="finished").last()
+        workouts = get_workouts_for_current_month(now.month, now.year, user)
+        next_workout = Workout.objects.filter(date__gte=now, status="created", user=user).first()
+        last_workout = Workout.objects.filter(date__lte=now, status="finished", user=user).last()
 
         return render(request, "climbed/index.html", {
             "date": date,
@@ -35,7 +36,8 @@ def get_month(request, action, current_month, current_year):
     elif action == "next":
         date = get_month_informations(current_month + 1, current_year)
     
-    workouts = get_workouts_for_current_month(date["current_month_number"], date["current_year"])
+    user = User.objects.get(username=request.user)
+    workouts = get_workouts_for_current_month(date["current_month_number"], date["current_year"], user=user)
     workouts_list = list(workouts.values())
 
     response_data = {

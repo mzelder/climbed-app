@@ -28,6 +28,6 @@ def get_month_informations(current_month, current_year):
         "days_list": days_list
     }
 
-def get_workouts_for_current_month(month, year): 
-    workouts = Workout.objects.filter(date__month=month, date__year=year)
+def get_workouts_for_current_month(month, year, user): 
+    workouts = Workout.objects.filter(date__month=month, date__year=year, user=user)
     return workouts
