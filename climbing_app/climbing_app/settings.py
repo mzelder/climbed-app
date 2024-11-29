@@ -33,6 +33,8 @@ ALLOWED_HOSTS = [
     "climbed.up.railway.app"
     ]
 
+CSRF_TRUSTED_ORIGINS = ['https://climbed.up.railway.app']
+
 
 # Application definition
 
