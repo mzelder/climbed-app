@@ -86,7 +86,7 @@ WSGI_APPLICATION = "climbing_app.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "data" / "database.db",
+        "NAME": "data" / "db.sqlite3",
     }
 }
 
