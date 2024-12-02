@@ -1,6 +1,2 @@
 /venv
 TODO.txt
-climbing_app/climbed/__pycache__/
-climbing_app/climbed/migrations/__pycache__/
-climbing_app/db.sqlite3
-climbing_app/db.sqlite3
